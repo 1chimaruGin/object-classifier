@@ -3,12 +3,12 @@
 ## Clone this repository
 - for SSH
 ```
-git clone git@github.com:1chimaruGin/Oject_classifier.git
+git clone git@github.com:1chimaruGin/Object-classifier.git
 ```
 
 - for https
 ```
-https://github.com/1chimaruGin/Oject_classifier.git
+https://github.com/1chimaruGin/Object-classifier.git
 ```
 
 ## Requirements
