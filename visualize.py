@@ -1,6 +1,8 @@
 import torch
 import matplotlib.pyplot as plt
 import numpy as np
+import torchvision.transforms as transforms
+from PIL import Image
 
 def imshow(inp, title=None):
     inp = inp.numpy().transpose((1, 2, 0))
@@ -39,14 +41,14 @@ def visualize_model(model, loader, class_names, device, num_images=6):
                     model.train(mode=was_training)
                     return model.train(mode=was_training)
 
-def visualize_single_image():
+def visualize_single_image(model, image, class_names, device):
     transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
+    img = transform(Image.open(image)).to(device)
     model.eval()
     with torch.no_grad():
-        img = transform(Image.open(image))
         output = model(img[None, ...])
         _, pred = torch.max(output, 1)
 

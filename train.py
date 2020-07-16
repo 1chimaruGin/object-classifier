@@ -1,4 +1,3 @@
-
 import torch
 import tqdm
 import time
@@ -77,5 +76,9 @@ def train_model(model, loader, size, criterion, optimizer, scheduler, num_epochs
     print('Best val Acc: {:4f}'.format(best_acc))
         # load best model weights
     model.load_state_dict(best_model_wts)
-    torch.save(model.state_dict(), 'weights/best_model')
+    checkpoint = {
+                'state_dict' : model.state_dict(),
+                'optimizer' : optimizer.state_dict()
+            }
+    torch.save(checkpoint, 'weights/best_model.pth')
     return model
