@@ -1,4 +1,4 @@
-# ants_bee_classification
+# OBJECT CLASSIFIER USING RESNET 50
 
 ## Clone this repository
 - for SSH
