@@ -23,10 +23,10 @@ cd Object_classifier
 - For training model
 
 ```
-$ python main.py -m [mode: train] -opt [optimizer]  -epochs [epochs]
+$ python main.py -m [mode: train] -opt [optimizer]  -epochs [epochs] -arch [backbone: ResNet or efficientNet] -lvl [efficientNet level]
 ```
 - For prediction
 ```
-$ python main.py -m [mode: predict] -im [input image]
+$ python main.py -m [mode: predict] -im [input image] - arch [backbone: ResNet or efficientNe] -lvl [efficientNet level]
 ```
 
