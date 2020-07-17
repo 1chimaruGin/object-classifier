@@ -17,7 +17,7 @@ def train_model(model, loader, size, criterion, optimizer, scheduler, num_epochs
                 model.train()
             else:
                 model.eval()
-            mloss = torch.zeros(4, device=device)  # mean losses
+            mloss = torch.zeros(1, device=device)  # mean losses
             running_loss = 0.0
             running_corrects = 0.0
 
@@ -41,9 +41,9 @@ def train_model(model, loader, size, criterion, optimizer, scheduler, num_epochs
                 running_loss += loss.item() * inputs.size(0)
                 running_corrects += torch.sum(pred == labels.data)
 
-                mloss = (mloss * i + running_loss) / (i + 1)  # update mean losses
+                mloss = (mloss * i + (loss.item() * inputs.size(0))) / (i + 1)  # update mean losses
                 mem = '%.3gG' % (torch.cuda.memory_cached() / 1E9 if torch.cuda.is_available() else 0)  # (GB)
-                s = ('%10s' * 2 + '%10.4g' * 6) % (
+                s = ('%10s' * 2 + '%10.4g' * 3) % (
                     'Epoch: %g/%g' % (epoch+1, num_epochs), mem, *mloss, labels.shape[0], inputs.shape[-1])
                 pbar.set_description(s)
 
