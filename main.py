@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.optim.lr_scheduler as lr_scheduler
 from data_loader import get_loader
-from model import Classifier
+from model import Classifier, efft
 from visualize import imshow, visualize_model, visualize_single_image
 from train import train_model
 import argparse
@@ -26,10 +26,17 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--root', type=str, default='data/hymenoptera_data', help='Dataset folder')
     parser.add_argument('-opt', '--optimizer', type=str, default='SGD', help='Optimizer')
     parser.add_argument('-epochs', '--epochs', type=int, default=25, help='Number of epochs')
-    
+    parser.add_argument('-arc', '--architecture', type=str, default='resent', help='ConvNet')
+    parser.add_argument('-cl', '--num_classes', type=int, default=2, help='Number of classes')
+    parser.add_argument('-lvl', '--efftlevel', type=int, default=0, help='EfficientNet Level')
     opt = parser.parse_args()
+    
 
-    model = Classifier(num_classes)
+    num_classes = opt.num_classes
+    if opt.architecture == 'efficientNet':
+        model = efft(num_classes, weights=opt.efftlevel)
+    else:
+        model = Classifier(num_classes)
     model = model.to(device)
 
     if opt.optimizer == 'Adam':
@@ -42,10 +49,9 @@ if __name__ == '__main__':
 
     criterion = nn.CrossEntropyLoss()
 
+    loader, size, class_names = get_loader(opt.root)
+    
     if opt.mode == 'train':
-        loader, size, class_names = get_loader(opt.root)
-        num_classes = len(class_names)
-
         train_model(model, loader, size, criterion, optimizer, scheduler, opt.epochs, device)
     
     elif opt.mode == 'predict':

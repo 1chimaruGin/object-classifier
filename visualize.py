@@ -46,13 +46,13 @@ def visualize_single_image(model, image, class_names, device):
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
-    img = transform(Image.open(image)).to(device)
+    img = transform(Image.open(image)).unsqueeze(0).to(device)
     model.eval()
     with torch.no_grad():
-        output = model(img[None, ...])
+        output = model(img)
         _, pred = torch.max(output, 1)
 
     ax = plt.subplot()
     ax.axis('off')
     ax.set_title('predicted: {}'.format(class_names[pred[0]]))
-    imshow(img.cpu().data)
+    imshow(img.squeeze(0).cpu().data)
