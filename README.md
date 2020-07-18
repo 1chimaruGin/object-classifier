@@ -18,15 +18,22 @@ pip install -U requirements.txt
 
 ## Usage
 ```
-cd Object_classifier
+cd Object-classifier
 ```
-- For training model
+- Change or update YAML in data folder
+
+- For training model(ResNet)
 
 ```
-$ python main.py -m [mode: train] -opt [optimizer]  -epochs [epochs] -arch [backbone: ResNet or efficientNet] -lvl [efficientNet level]
+$ python main.py -m [mode: train] -opt [optimizer: (default='SGD')]  -epochs [epochs: (default=25)] 
+```
+- For training model(EfficientNet)
+
+```
+$ python main.py -m [mode: train] -opt [optimizer]  -epochs [epochs] -backbone [backbone: efficientNet] -lvl [efficientNet level]
 ```
 - For prediction
 ```
-$ python main.py -m [mode: predict] -im [input image] - arch [backbone: ResNet or efficientNe] -lvl [efficientNet level]
+$ python main.py -m [mode: predict] -im [input image] - backbone [backbone: ResNet or efficientNe] -lvl [efficientNet level]
 ```
 
