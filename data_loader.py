@@ -25,6 +25,4 @@ def get_loader(root):
 
     dataset_size = {x: len(dataset[x]) for x in ['train', 'val']}
 
-    class_names = dataset['train'].classes
-
-    return data_loader, dataset_size, class_names
+    return data_loader, dataset_size
