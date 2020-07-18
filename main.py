@@ -7,6 +7,7 @@ from model import Classifier, efft
 from visualize import imshow, visualize_model, visualize_single_image
 from train import train_model
 import argparse
+import yaml
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -26,14 +27,18 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--root', type=str, default='data/hymenoptera_data', help='Dataset folder')
     parser.add_argument('-opt', '--optimizer', type=str, default='SGD', help='Optimizer')
     parser.add_argument('-epochs', '--epochs', type=int, default=25, help='Number of epochs')
-    parser.add_argument('-arc', '--architecture', type=str, default='resent', help='ConvNet')
-    parser.add_argument('-cl', '--num_classes', type=int, default=2, help='Number of classes')
+    parser.add_argument('-backbone', '--backbone', type=str, default='resent', help='ConvNet')
     parser.add_argument('-lvl', '--efftlevel', type=int, default=0, help='EfficientNet Level')
+    parser.add_argument('-data', '--data', type=str, default='data/data.yaml', help='Yaml file')
     opt = parser.parse_args()
-    
 
-    num_classes = opt.num_classes
-    if opt.architecture == 'efficientNet':
+    with open(opt.data) as f:
+        data_dict = yaml.load(f, Loader=yaml.FullLoader)
+
+    num_classes, class_names = (int(data_dict['nc']), data_dict['names'])
+    assert len(names) == nc, 'Length of class names and number of classes do not match!'
+
+    if opt.backbone == 'efficientNet':
         model = efft(num_classes, weights=opt.efftlevel)
     else:
         model = Classifier(num_classes)
@@ -49,9 +54,8 @@ if __name__ == '__main__':
 
     criterion = nn.CrossEntropyLoss()
 
-    loader, size, class_names = get_loader(opt.root)
-    
     if opt.mode == 'train':
+        loader, size = get_loader(opt.root)
         train_model(model, loader, size, criterion, optimizer, scheduler, opt.epochs, device)
     
     elif opt.mode == 'predict':
