@@ -1,4 +1,4 @@
-# OBJECT CLASSIFIER USING RESNET 50
+# OBJECT CLASSIFIER 
 
 ## Clone this repository
 - for SSH
