@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.optim.lr_scheduler as lr_scheduler
-from data_loader import get_loader
+from data_loader import get_loader, CIFAR10
 from model import Classifier, efft
 from visualize import imshow, visualize_model, visualize_single_image
 from train import train_model
@@ -24,7 +24,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-m', '--mode', type=str, default=None, help='Mode')
     parser.add_argument('-im', '--image', type=str, default=None, help='Input Image')
-    parser.add_argument('-d', '--root', type=str, default='data/hymenoptera_data', help='Dataset folder')
+    parser.add_argument('-d', '--root', type=str, default='data/', help='Dataset folder')
     parser.add_argument('-opt', '--optimizer', type=str, default='SGD', help='Optimizer')
     parser.add_argument('-epochs', '--epochs', type=int, default=25, help='Number of epochs')
     parser.add_argument('-backbone', '--backbone', type=str, default='resent', help='ConvNet')
@@ -36,11 +36,13 @@ if __name__ == '__main__':
         data_dict = yaml.load(f, Loader=yaml.FullLoader)
 
     num_classes, class_names = (int(data_dict['nc']), data_dict['names'])
-    assert len(names) == nc, 'Length of class names and number of classes do not match!'
+    assert len(class_names) == num_classes, 'Length of class names and number of classes do not match!'
 
     if opt.backbone == 'efficientNet':
+        backbone = 'efficientNet'
         model = efft(num_classes, weights=opt.efftlevel)
     else:
+        backbone = 'resnet'
         model = Classifier(num_classes)
     model = model.to(device)
 
@@ -55,11 +57,11 @@ if __name__ == '__main__':
     criterion = nn.CrossEntropyLoss()
 
     if opt.mode == 'train':
-        loader, size = get_loader(opt.root)
-        train_model(model, loader, size, criterion, optimizer, scheduler, opt.epochs, device)
+        loader, size = CIFAR10(opt.root)
+        train_model(model, loader, size, criterion, optimizer, scheduler, opt.epochs, device, save_loc=backbone)
     
     elif opt.mode == 'predict':
-        model = load_checkpoint(torch.load('weights/best_model.pth', map_location=torch.device(device)), model, optimizer)
+        model = load_checkpoint(torch.load('weights/{}_best_model.pth'.format(backbone), map_location=torch.device(device)), model, optimizer)
         predict(model, opt.image, class_names, device)
 
     

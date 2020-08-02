@@ -6,7 +6,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 writer = SummaryWriter('logs')
 
-def train_model(model, loader, size, criterion, optimizer, scheduler, num_epochs, device):
+def train_model(model, loader, size, criterion, optimizer, scheduler, num_epochs, device, save_loc):
     since = time.time()
     best_model_wts = copy.deepcopy(model.state_dict())
     best_acc = 0.0
@@ -80,5 +80,5 @@ def train_model(model, loader, size, criterion, optimizer, scheduler, num_epochs
                 'state_dict' : model.state_dict(),
                 'optimizer' : optimizer.state_dict()
             }
-    torch.save(checkpoint, 'weights/best_model.pth')
+    torch.save(checkpoint, 'weights/{}_best_model.pth'.format(save_loc))
     return model

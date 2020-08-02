@@ -3,5 +3,11 @@ __pycache__/
 .vscode/
 
 data/hymenoptera_data/
+data/cifar-10-batches-py/
+
+weights/resnet50-pretrained.pth
 
 logs/
+
+!logs/gg
+

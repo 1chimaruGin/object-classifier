@@ -1,2 +1,2 @@
-nc: 2
-names: ['ants','bee']
+nc: 10
+names: ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
