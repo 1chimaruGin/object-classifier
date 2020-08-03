@@ -6,12 +6,27 @@ from torch.utils.tensorboard import SummaryWriter
 
 writer = SummaryWriter('logs')
 
-def train_model(model, loader, size, criterion, optimizer, scheduler, num_epochs, device, save_loc):
+def save_checkpoint(state, filename="my_checkpoint.pth.tar"):
+    print("=> Saving checkpoint")
+    torch.save(state, filename)
+
+def load_checkpoint(checkpoint, model, optimizer):
+    print("=> Loading checkpoint")
+    model.load_state_dict(checkpoint["state_dict"])
+    optimizer.load_state_dict(checkpoint["optimizer"])
+    step = checkpoint["step"]
+    return step
+
+def train_model(model, loader, size, criterion, optimizer, scheduler, num_epochs, device, save_loc, load_model):
+    step = 0
+    if load_model:
+        step = load_checkpoint(torch.load('weights/{}_best_weights.pth.tar'.format(save_loc), map_location=torch.device(device)), model, optimizer)
+
     since = time.time()
     best_model_wts = copy.deepcopy(model.state_dict())
     best_acc = 0.0
     
-    for epoch in range(num_epochs):
+    for epoch in range(50, num_epochs):
         for phase in ['train', 'val']:
             if phase == 'train':
                 model.train()
@@ -33,6 +48,7 @@ def train_model(model, loader, size, criterion, optimizer, scheduler, num_epochs
                     _, pred = torch.max(outputs, 1)
 
                     loss = criterion(outputs, labels)
+                    step += 1
 
                     if phase == 'train':
                         loss.backward()
@@ -78,7 +94,8 @@ def train_model(model, loader, size, criterion, optimizer, scheduler, num_epochs
     model.load_state_dict(best_model_wts)
     checkpoint = {
                 'state_dict' : model.state_dict(),
-                'optimizer' : optimizer.state_dict()
+                'optimizer' : optimizer.state_dict(),
+                'step' : step
             }
-    torch.save(checkpoint, 'weights/{}_best_model.pth'.format(save_loc))
+    save_checkpoint(checkpoint, filename='weights/{}_best_weights.pth.tar'.format(save_loc))
     return model

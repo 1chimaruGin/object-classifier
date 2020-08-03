@@ -14,12 +14,6 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 def predict(model, image, class_names, device):
     visualize_single_image(model, image, class_names, device)
 
-def load_checkpoint(checkpoint, model, optimizer):
-    print("=> Loading checkpoint")
-    model.load_state_dict(checkpoint["state_dict"])
-    optimizer.load_state_dict(checkpoint["optimizer"])
-    return model
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-m', '--mode', type=str, default=None, help='Mode')
@@ -30,6 +24,7 @@ if __name__ == '__main__':
     parser.add_argument('-backbone', '--backbone', type=str, default='resent', help='ConvNet')
     parser.add_argument('-lvl', '--efftlevel', type=int, default=0, help='EfficientNet Level')
     parser.add_argument('-data', '--data', type=str, default='data/data.yaml', help='Yaml file')
+    parser.add_argument('-load', '--load', default=False, type=bool)
     opt = parser.parse_args()
 
     with open(opt.data) as f:
@@ -47,10 +42,11 @@ if __name__ == '__main__':
     model = model.to(device)
 
     if opt.optimizer == 'Adam':
-        optimizer = optim.Adam(model.parameters(), lr=1e-3)
+        optimizer = optim.Adam(model.parameters(), lr=1e-2)
     
     else:
-        optimizer = optim.SGD(model.parameters(), lr=1e-3, momentum=0.9)
+        optimizer = optim.SGD(model.parameters(), lr=0.1,
+                      momentum=0.9, weight_decay=5e-4)
     
     scheduler = lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
 
@@ -58,10 +54,10 @@ if __name__ == '__main__':
 
     if opt.mode == 'train':
         loader, size = CIFAR10(opt.root)
-        train_model(model, loader, size, criterion, optimizer, scheduler, opt.epochs, device, save_loc=backbone)
+        train_model(model, loader, size, criterion, optimizer, scheduler, opt.epochs, device, save_loc=backbone, load_model = opt.load)
     
     elif opt.mode == 'predict':
-        model = load_checkpoint(torch.load('weights/{}_best_model.pth'.format(backbone), map_location=torch.device(device)), model, optimizer)
+        model = load_checkpoint(torch.load('weights/{}_best_weights.pth.tar'.format(backbone), map_location=torch.device(device)), model, optimizer)
         predict(model, opt.image, class_names, device)
 
     

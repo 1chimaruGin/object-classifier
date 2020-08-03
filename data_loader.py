@@ -31,7 +31,7 @@ def CIFAR10(root='data/'):
     dataset = {x: datasets.CIFAR10(root, train=(x=='train'), download=True, transform=transform[x])
                 for x in ['train', 'val']}
 
-    data_loader = {x: torch.utils.data.DataLoader(dataset[x], batch_size=8, shuffle=(x=='train'))
+    data_loader = {x: torch.utils.data.DataLoader(dataset[x], batch_size=32, shuffle=(x=='train'), num_workers=4)
                 for x in ['train', 'val']}
 
     dataset_size = {x: len(dataset[x]) for x in ['train', 'val']}
