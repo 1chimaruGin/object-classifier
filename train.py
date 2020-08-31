@@ -26,7 +26,7 @@ def train_model(model, loader, size, criterion, optimizer, scheduler, num_epochs
     best_model_wts = copy.deepcopy(model.state_dict())
     best_acc = 0.0
     
-    for epoch in range(50, num_epochs):
+    for epoch in range(num_epochs):
         for phase in ['train', 'val']:
             if phase == 'train':
                 model.train()

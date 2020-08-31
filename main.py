@@ -5,7 +5,7 @@ import torch.optim.lr_scheduler as lr_scheduler
 from data_loader import get_loader, CIFAR10
 from model import Classifier, efft
 from visualize import imshow, visualize_model, visualize_single_image
-from train import train_model
+from train import train_model, load_checkpoint
 import argparse
 import yaml
 
@@ -48,12 +48,12 @@ if __name__ == '__main__':
         optimizer = optim.SGD(model.parameters(), lr=0.1,
                       momentum=0.9, weight_decay=5e-4)
     
-    scheduler = lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
+    scheduler = lr_scheduler.StepLR(optimizer, step_size=3, gamma=0.1)
 
     criterion = nn.CrossEntropyLoss()
 
     if opt.mode == 'train':
-        loader, size = CIFAR10(opt.root)
+        loader, size = get_loader(opt.root)
         train_model(model, loader, size, criterion, optimizer, scheduler, opt.epochs, device, save_loc=backbone, load_model = opt.load)
     
     elif opt.mode == 'predict':

@@ -4,6 +4,8 @@ __pycache__/
 
 data/hymenoptera_data/
 data/cifar-10-batches-py/
+data/train
+data/val
 
 weights/resnet50-pretrained.pth
 

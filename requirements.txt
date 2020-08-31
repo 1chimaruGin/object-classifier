@@ -3,3 +3,4 @@ torchvision===0.6.1
 matplotlib
 numpy
 argparse==1.4.0
+tqdm
