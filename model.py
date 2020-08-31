@@ -21,11 +21,21 @@ class Classifier(nn.Module):
 
 
 class efft(nn.Module):
-    def __init__(self, num_classes, weights=None):
+    def __init__(self, num_classes, weights=None, train_backbone=False):
         super(efft, self).__init__()
+        self.train_backbone = train_backbone
         self.EfficientNet = EfficientNet.from_pretrained('efficientnet-b{}'.format(weights), num_classes=num_classes)
 
     def forward(self, x):
+        if self.train_backbone:
+            for name, param in self.EfficientNet.named_parameters():
+                if 'fc.weight' in name or 'fc.bias' in name:
+                    param.requires_grad = True
+                else:
+                    param.requires_grad = False
+                    
         x = self.EfficientNet(x)
 
         return x
+
+print(efft(10, 3))
