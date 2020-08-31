@@ -16,11 +16,31 @@ https://github.com/1chimaruGin/Object-classifier.git
 pip install -U requirements.txt
 ```
 
+## Dataset
+
+- the dataset directory should be the following format.
+
+```
+
+# for example, dog vs cat classification
+data/
+    -train/
+        dog/
+            -*.jpg or *.png
+        cat/
+            -*.jpg or *.png
+    -val/
+        dog/
+            -*.jpg or *.png
+        cat/
+            -*.jpg or *.png
+```
+
 ## Usage
 ```
 cd Object-classifier
 ```
-- Change or update YAML in data folder
+- Update number of classes and names in data.yaml
 
 - For training model(ResNet)
 
