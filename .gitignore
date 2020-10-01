@@ -13,3 +13,10 @@ logs/
 
 !logs/gg
 
+build/
+
+dist/
+
+main.spec
+
+data/cifar-10-python.tar.gz

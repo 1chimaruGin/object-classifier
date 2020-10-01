@@ -1,7 +1,7 @@
-import torch
 import torch.nn as nn
 import torchvision.models as models
 from efficientnet import EfficientNet
+
 
 class Classifier(nn.Module):
     def __init__(self, num_classes):
@@ -12,7 +12,7 @@ class Classifier(nn.Module):
     def forward(self, x):
         x = self.model(x)
         for name, param in self.model.named_parameters():
-            if 'fc.weight' in name or 'fc.bias' in name:
+            if "fc.weight" in name or "fc.bias" in name:
                 param.requires_grad = True
             else:
                 param.requires_grad = False
@@ -21,21 +21,29 @@ class Classifier(nn.Module):
 
 
 class efft(nn.Module):
-    def __init__(self, num_classes, weights=None, train_backbone=False):
+    def __init__(
+        self, num_classes, weights=None, train_backbone=True, 
+        from_scratch=False
+    ):
         super(efft, self).__init__()
         self.train_backbone = train_backbone
-        self.EfficientNet = EfficientNet.from_pretrained('efficientnet-b{}'.format(weights), num_classes=num_classes)
+        self.EfficientNet = (
+            EfficientNet.from_pretrained(
+                "efficientnet-b{}".format(weights), num_classes=num_classes
+            )
+            if not from_scratch
+            else EfficientNet.from_name(
+                "efficientnet-b{}".format(weights), num_classes=num_classes
+            )
+        )
 
     def forward(self, x):
-        if self.train_backbone:
+        x = self.EfficientNet(x)
+        if not self.train_backbone:
             for name, param in self.EfficientNet.named_parameters():
-                if 'fc.weight' in name or 'fc.bias' in name:
+                if "fc.weight" in name or "fc.bias" in name:
                     param.requires_grad = True
                 else:
                     param.requires_grad = False
-                    
-        x = self.EfficientNet(x)
 
         return x
-
-print(efft(10, 3))
