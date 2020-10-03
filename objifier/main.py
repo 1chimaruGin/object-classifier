@@ -40,7 +40,8 @@ if __name__ == "__main__":
         "-lvl", "--efftlevel", type=int, default=0, help="EfficientNet Level"
     )
     parser.add_argument(
-        "-data", "--data", type=str, default="data/data.yaml", help="Yaml file"
+        "-data", "--data", type=str, default="objifier/data/data.yaml",
+        help="Yaml file"
     )
     parser.add_argument(
         '-0', '--output', type=str, default='output', help='Output location'

@@ -20,3 +20,15 @@ dist/
 main.spec
 
 objifier/data/cifar-10-python.tar.gz
+
+objifier/__pycache__
+
+objifier.egg-info
+
+data/
+
+setup.cfg
+
+test.py
+
+test.yaml

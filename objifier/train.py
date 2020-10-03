@@ -4,10 +4,8 @@ import time
 import copy
 import logging
 from torch.utils.tensorboard import SummaryWriter
-from log import setup_default_logging
 
-writer = SummaryWriter("logs")
-setup_default_logging()
+writer = SummaryWriter('logs')
 
 
 def save_checkpoint(state, filename="my_checkpoint.pth.tar"):

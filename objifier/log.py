@@ -15,7 +15,7 @@ class FormatterNoInfo(logging.Formatter):
         return logging.Formatter.format(self, record)
 
 
-def setup_default_logging(default_level=logging.INFO, log_path='log.txt'):
+def setup_default_logging(default_level=logging.INFO, log_path=''):
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(FormatterNoInfo())
     logging.root.addHandler(console_handler)

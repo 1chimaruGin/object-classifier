@@ -1,6 +1,6 @@
 import torch.nn as nn
 import torchvision.models as models
-from efficientnet import EfficientNet
+from objifier.efficientnet import EfficientNet
 
 
 class Classifier(nn.Module):
