@@ -20,8 +20,12 @@ def predict(model, image, class_names, device):
 def build(config):
     with open(config) as f:
         data_dict = yaml.load(f, Loader=yaml.FullLoader)
-        
-    setup_default_logging(log_path=data_dict['logs'])
+
+    setup_default_logging(
+            log_path=data_dict['logs']
+            if data_dict['logs'] else 'log.txt'
+        )
+
     num_classes, class_names = (int(data_dict["nc"]), data_dict["names"])
     assert (
         len(class_names) == num_classes
@@ -31,23 +35,24 @@ def build(config):
         model = efft(num_classes, weights=data_dict['efftlvl'])
     else:
         model = Classifier(num_classes)
+
     model = model.to(device)
 
-    if data_dict['optimizer'] == "Adam":
-        optimizer = optim.Adam(model.parameters(), lr=1e-2)
-
-    else:
-        optimizer = optim.SGD(
-            model.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4
-        )
-
-    scheduler = lr_scheduler.StepLR(optimizer, step_size=3, gamma=0.1)
-
-    criterion = nn.CrossEntropyLoss()
-
     if data_dict['mode'] == "train":
+        if data_dict['optimizer'] == "Adam":
+            optimizer = optim.Adam(model.parameters(), lr=1e-2)
+
+        else:
+            optimizer = optim.SGD(
+                model.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4
+            )
+
+        scheduler = lr_scheduler.StepLR(optimizer, step_size=3, gamma=0.1)
+        criterion = nn.CrossEntropyLoss()
+
         loader, size = get_loader(data_dict['dataset_path']) \
             if data_dict['dataset_path'] else CIFAR10()
+
         train_model(
             model,
             loader,
