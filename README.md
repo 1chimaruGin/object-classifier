@@ -36,9 +36,9 @@ data/
             -*.jpg or *.png
 ```
 
-## Usage
+## Usage with Argparse
 ```
-cd Object-classifier
+cd Object-classifier/objifier
 ```
 - Update number of classes and names in data.yaml
 
@@ -55,5 +55,53 @@ $ python main.py -m [mode: train] -opt [optimizer]  -epochs [epochs] -backbone [
 - For prediction
 ```
 $ python main.py -m [mode: predict] -im [input image] - backbone [backbone: ResNet or efficientNe] -lvl [efficientNet level]
+```
+
+## Usage with YAML (via pip)
+
+#### Create a YAML file as sample below:
+
+- For training
+```
+nc: 10
+# names: ['mantled_howler', 'patas_monkey', 'bald_uakari', 'japanese_macaque', 'pygmy_marmoset', 
+#       'white_headed_capuchin', 'silvery_marmoset', 'common_squirrel_monkey', 'black_headed_night_monkey','nilgiri_langur' ]
+
+names: ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+
+backbone: 'efficientNet'
+
+efftlvl: 0
+
+optimizer: 'Adam'
+
+mode: 'train'
+
+epoch: 2
+
+load: False
+
+output: 'output'
+
+dataset_path: null
+
+```
+- For prediction
+
+```
+nc: 10
+# names: ['mantled_howler', 'patas_monkey', 'bald_uakari', 'japanese_macaque', 'pygmy_marmoset', 
+#       'white_headed_capuchin', 'silvery_marmoset', 'common_squirrel_monkey', 'black_headed_night_monkey','nilgiri_langur' ]
+
+names: ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+
+backbone: 'efficientNet'
+
+efftlvl: 0
+
+output: 'output'
+
+image: 'baobao.jpg'
+
 ```
 
