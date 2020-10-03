@@ -61,7 +61,7 @@ $ python main.py -m [mode: predict] -im [input image] - backbone [backbone: ResN
 
 #### Create a YAML file as sample below:
 
-- For training
+- For training [train.yaml]
 ```
 nc: 10
 # names: ['mantled_howler', 'patas_monkey', 'bald_uakari', 'japanese_macaque', 'pygmy_marmoset', 
@@ -86,7 +86,7 @@ output: 'output'
 dataset_path: null
 
 ```
-- For prediction
+- For prediction [predict.yaml]
 
 ```
 nc: 10
