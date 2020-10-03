@@ -22,7 +22,7 @@ class Classifier(nn.Module):
 
 class efft(nn.Module):
     def __init__(
-        self, num_classes, weights=None, train_backbone=True, 
+        self, num_classes, weights=None, train_backbone=True,
         from_scratch=False
     ):
         super(efft, self).__init__()

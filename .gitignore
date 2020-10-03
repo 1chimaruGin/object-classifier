@@ -2,16 +2,16 @@ __pycache__/
 
 .vscode/
 
-data/hymenoptera_data/
-data/cifar-10-batches-py/
-data/train
-data/val
+objifier/data/hymenoptera_data/
+objifier/data/cifar-10-batches-py/
+objifier/data/train
+objifier/data/val
 
-weights/resnet50-pretrained.pth
+objifier/weights/resnet50-pretrained.pth
 
-logs/
+objifier/logs/
 
-!logs/gg
+!objifier/logs/gg
 
 build/
 
@@ -19,4 +19,4 @@ dist/
 
 main.spec
 
-data/cifar-10-python.tar.gz
+objifier/data/cifar-10-python.tar.gz

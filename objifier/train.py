@@ -2,18 +2,21 @@ import torch
 import tqdm
 import time
 import copy
+import logging
 from torch.utils.tensorboard import SummaryWriter
+from log import setup_default_logging
 
 writer = SummaryWriter("logs")
+setup_default_logging()
 
 
 def save_checkpoint(state, filename="my_checkpoint.pth.tar"):
-    print("=> Saving checkpoint")
+    logging.info("=> Saving checkpoint")
     torch.save(state, filename)
 
 
 def load_checkpoint(checkpoint, model, optimizer):
-    print("=> Loading checkpoint")
+    logging.info("=> Loading checkpoint")
     model.load_state_dict(checkpoint["state_dict"])
     optimizer.load_state_dict(checkpoint["optimizer"])
     step = checkpoint["step"]
@@ -57,7 +60,10 @@ def train_model(
             running_loss = 0.0
             running_corrects = 0.0
 
-            pbar = tqdm.tqdm(enumerate(loader[phase]), total=len(loader[phase]))
+            pbar = tqdm.tqdm(
+                    enumerate(loader[phase]),
+                    total=len(loader[phase])
+                )
             for i, (inputs, labels) in pbar:
                 inputs = inputs.to(device)
                 labels = labels.to(device)
@@ -82,7 +88,8 @@ def train_model(
                     i + 1
                 )  # update mean losses
                 mem = "%.3gG" % (
-                    torch.cuda.memory_cached() / 1e9 if torch.cuda.is_available() else 0
+                    torch.cuda.memory_reserved() / 1e9
+                    if torch.cuda.is_available() else 0
                 )  # (GB)
                 s = ("%10s" * 2 + "%10.4g" * 3) % (
                     "Epoch: %g/%g" % (epoch + 1, num_epochs),
@@ -106,7 +113,7 @@ def train_model(
                 writer.add_scalar("val loss", epoch_loss, epoch + 1)
                 writer.add_scalar("val acc", epoch_acc, epoch + 1)
 
-            print("{} Loss: {:.4f} Acc: {:.4f}".format(
+            logging.info("{} Loss: {:.4f} Acc: {:.4f}".format(
                 phase, epoch_loss, epoch_acc)
             )
 
@@ -117,12 +124,12 @@ def train_model(
         print()
 
     time_elapsed = time.time() - since
-    print(
+    logging.info(
         "Training complete in {:.0f}m {:.0f}s".format(
             time_elapsed // 60, time_elapsed % 60
         )
     )
-    print("Best val Acc: {:4f}".format(best_acc))
+    logging.info("Best val Acc: {:4f}".format(best_acc))
     # load best model weights
     model.load_state_dict(best_model_wts)
     checkpoint = {

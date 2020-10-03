@@ -1,13 +1,15 @@
+import yaml
+import argparse
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.optim.lr_scheduler as lr_scheduler
+
 from data_loader import get_loader, CIFAR10
 from model import Classifier, efft
 from visualize import visualize_single_image
 from train import train_model, load_checkpoint
-import argparse
-import yaml
+
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -18,12 +20,12 @@ def predict(model, image, class_names, device):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-m", "--mode", type=str, default=None, help="Mode")
+    parser.add_argument("-m", "--mode", type=str, default='train', help="Mode")
     parser.add_argument(
         "-im", "--image", type=str, default=None, help="Input Image"
     )
     parser.add_argument(
-        "-d", "--root", type=str, default="data/", help="Dataset folder"
+        "-d", "--root", type=str, default=None, help="Dataset folder"
     )
     parser.add_argument(
         "-opt", "--optimizer", type=str, default="SGD", help="Optimizer"
@@ -40,6 +42,10 @@ if __name__ == "__main__":
     parser.add_argument(
         "-data", "--data", type=str, default="data/data.yaml", help="Yaml file"
     )
+    parser.add_argument(
+        '-0', '--output', type=str, default='output', help='Output location'
+    )
+
     parser.add_argument("-load", "--load", default=False, type=bool)
     opt = parser.parse_args()
 
@@ -52,10 +58,10 @@ if __name__ == "__main__":
     ), "Length of class names and number of classes do not match!"
 
     if opt.backbone == "efficientNet":
-        backbone = "efficientNet"
+        backbone = opt.output+"/efficientNet"
         model = efft(num_classes, weights=opt.efftlevel)
     else:
-        backbone = "resnet"
+        backbone = opt.output+"/resnet"
         model = Classifier(num_classes)
     model = model.to(device)
 
@@ -72,7 +78,8 @@ if __name__ == "__main__":
     criterion = nn.CrossEntropyLoss()
 
     if opt.mode == "train":
-        loader, size = get_loader(opt.root)
+        loader, size = get_loader(opt.root) \
+            if opt.root else CIFAR10()
         train_model(
             model,
             loader,

@@ -1,6 +1,7 @@
-torch===1.5.1 
-torchvision===0.6.1
+torch>=1.5.1 
+torchvision>=0.6.1
 matplotlib
 numpy
 argparse==1.4.0
 tqdm
+pyyaml
