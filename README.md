@@ -69,6 +69,11 @@ from objifier import build
 
 build(config='train.yaml')
 ```
+- predict.py
+
+```
+build(config='predict.py')
+```
 
 #### Create a YAML file as sample below:
 
