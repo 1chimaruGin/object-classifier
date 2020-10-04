@@ -72,7 +72,7 @@ build(config='train.yaml')
 - predict.py
 
 ```
-build(config='predict.py')
+build(config='predict.yaml')
 ```
 
 #### Create a YAML file as sample below:
