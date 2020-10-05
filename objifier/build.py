@@ -50,8 +50,12 @@ def build(config):
         scheduler = lr_scheduler.StepLR(optimizer, step_size=3, gamma=0.1)
         criterion = nn.CrossEntropyLoss()
 
-        loader, size = get_loader(data_dict['dataset_path']) \
-            if data_dict['dataset_path'] else CIFAR10()
+        loader, size = get_loader(
+                data_dict['dataset_path'],
+                data_dict['batch_size'],
+                data_dict['num_workers']
+            ) \
+            if data_dict['dataset_path'] else CIFAR10(data_dict['batch_size'])
 
         train_model(
             model,

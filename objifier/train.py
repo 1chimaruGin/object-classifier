@@ -8,11 +8,13 @@ from torch.utils.tensorboard import SummaryWriter
 writer = SummaryWriter('logs')
 
 
+# Save weights
 def save_checkpoint(state, filename="my_checkpoint.pth.tar"):
     logging.info("=> Saving checkpoint")
     torch.save(state, filename)
 
 
+# Load weights
 def load_checkpoint(checkpoint, model, optimizer):
     logging.info("=> Loading checkpoint")
     model.load_state_dict(checkpoint["state_dict"])
@@ -21,6 +23,7 @@ def load_checkpoint(checkpoint, model, optimizer):
     return step
 
 
+# Training Loop
 def train_model(
     model,
     loader,
@@ -128,6 +131,7 @@ def train_model(
         )
     )
     logging.info("Best val Acc: {:4f}".format(best_acc))
+
     # load best model weights
     model.load_state_dict(best_model_wts)
     checkpoint = {

@@ -26,7 +26,7 @@ transform = {
 }
 
 
-def get_loader(root):
+def get_loader(root, batch_size, num_workers):
 
     dataset = {
         x: datasets.ImageFolder(os.path.join(root, x), transform=transform[x])
@@ -35,7 +35,8 @@ def get_loader(root):
 
     data_loader = {
         x: torch.utils.data.DataLoader(
-            dataset[x], batch_size=2, shuffle=(x == "train"), num_workers=0
+            dataset[x], batch_size=batch_size, shuffle=(x == "train"),
+            num_workers=num_workers,
         )
         for x in ["train", "val"]
     }
@@ -45,7 +46,7 @@ def get_loader(root):
     return data_loader, dataset_size
 
 
-def CIFAR10(root="data/"):
+def CIFAR10(batch_size, root="data/"):
     dataset = {
         x: datasets.CIFAR10(
             root, train=(x == "train"), download=True, transform=transform[x]
@@ -55,7 +56,7 @@ def CIFAR10(root="data/"):
 
     data_loader = {
         x: torch.utils.data.DataLoader(
-            dataset[x], batch_size=32, shuffle=(x == "train")
+            dataset[x], batch_size=batch_size, shuffle=(x == "train")
         )
         for x in ["train", "val"]
     }
