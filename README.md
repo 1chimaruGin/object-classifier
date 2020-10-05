@@ -59,13 +59,28 @@ $ python main.py -m [mode: predict] -im [input image] - backbone [backbone: ResN
 
 ## Usage with YAML (via pip)
 
+`
+$ pip install ojifier
+`
+- train.py
+
+```
+from objifier import build
+
+build(config='train.yaml')
+```
+- predict.py
+
+```
+build(config='predict.yaml')
+```
+
 #### Create a YAML file as sample below:
 
 - For training [train.yaml]
+
 ```
 nc: 10
-# names: ['mantled_howler', 'patas_monkey', 'bald_uakari', 'japanese_macaque', 'pygmy_marmoset', 
-#       'white_headed_capuchin', 'silvery_marmoset', 'common_squirrel_monkey', 'black_headed_night_monkey','nilgiri_langur' ]
 
 names: ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 
@@ -90,8 +105,6 @@ dataset_path: null
 
 ```
 nc: 10
-# names: ['mantled_howler', 'patas_monkey', 'bald_uakari', 'japanese_macaque', 'pygmy_marmoset', 
-#       'white_headed_capuchin', 'silvery_marmoset', 'common_squirrel_monkey', 'black_headed_night_monkey','nilgiri_langur' ]
 
 names: ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 
