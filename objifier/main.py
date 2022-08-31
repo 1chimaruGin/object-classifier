@@ -104,3 +104,5 @@ if __name__ == "__main__":
             optimizer,
         )
         predict(model, opt.image, class_names, device)
+
+    print("[INFO] Done!!")
